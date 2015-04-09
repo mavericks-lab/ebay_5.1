@@ -1,0 +1,29 @@
+{
+  "name": "maverickslab/ebay",
+  "description": "An ebay package for interacting with ebay API",
+  "keywords": [
+    "ebay",
+    "laravel"
+  ],
+  "authors": [
+    {
+      "name": "SynCommerce",
+      "email": "info@syncommerceapp.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/support": "5.0.*",
+    "guzzlehttp/guzzle": "dev-master",
+    "mockery/mockery": "0.9.*"
+  },
+  "autoload": {
+    "classmap": [
+      "src/controllers"
+    ],
+    "psr-0": {
+      "Maverickslab\\Ebay": "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
