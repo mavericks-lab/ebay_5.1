@@ -12,7 +12,7 @@ namespace Maverickslab\Ebay;
 class Category {
     use InjectAPIRequester;
 
-    public function get($user_token, $level_limit=0, $site_id=0){
+    public function get($user_token, $level_limit=1, $site_id=0){
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
