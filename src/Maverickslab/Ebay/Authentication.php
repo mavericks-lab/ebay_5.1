@@ -44,11 +44,11 @@
                     . "&SessID="
                     . urlencode($session_id);
 
-                return Redirect::to($url);
+                //return Redirect::to($url);
                 return $url;
             }
-//
-//            return $response;
+
+            return $response;
         }
 
         /**
