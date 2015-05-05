@@ -45,12 +45,8 @@
             $request_body['WarningLevel'] = config('ebay.warning_level');
             $request_body['ErrorLanguage'] = config('ebay.error_language');
 
-//            return $inputs;
-
             $xml = ArrayToXML::createXML($root_node, array_merge($request_body, $inputs));
             $request_body = $xml->saveXML();
-
-//            dd($request_body);
 
             $response = $this->http_client->post(config('ebay.base_url'), [
                 'headers' => $headers,

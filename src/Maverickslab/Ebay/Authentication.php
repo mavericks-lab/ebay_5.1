@@ -17,7 +17,8 @@
     {
         use InjectAPIRequester;
 
-        public function install(){
+        public function install()
+        {
             return self::getSessionId();
         }
 
@@ -32,23 +33,23 @@
             $inputs = [];
             $inputs['RuName'] = config('ebay.runame');
 
-            $response = $this->requester->request($inputs, 'GetSessionID');
+            return $this->requester->request($inputs, 'GetSessionID');
 
-//            if ($response['Ack'] === 'Success') {
-//                $session_id = $response['SessionID'];
-//                Session::put('ebay_session_id', $session_id);
-//
-//                $url = config('ebay.sign_in_url')
-//                    . "?SignIn&runame="
-//                    . config("ebay.runame")
-//                    . "&SessID="
-//                    . urlencode($session_id);
-//
-//                //return Redirect::to($url);
-//                return $url;
-//            }
+            //            if ($response['Ack'] === 'Success') {
+            //                $session_id = $response['SessionID'];
+            //                Session::put('ebay_session_id', $session_id);
+            //
+            //                $url = config('ebay.sign_in_url')
+            //                    . "?SignIn&runame="
+            //                    . config("ebay.runame")
+            //                    . "&SessID="
+            //                    . urlencode($session_id);
+            //
+            //                //return Redirect::to($url);
+            //                return $url;
+            //            }
 
-            return $response;
+            //            return $response;
         }
 
         /**
@@ -103,7 +104,8 @@
             return $this->requester->request($inputs, 'GetUserPreferences');
         }
 
-        public function getStore($user_token){
+        public function getStore($user_token)
+        {
 
             $inputs = [];
             $inputs['RequesterCredentials'] = [
