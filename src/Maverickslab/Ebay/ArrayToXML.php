@@ -1,6 +1,7 @@
 <?php
     namespace Maverickslab\Ebay;
     use DOMDocument;
+    use Exception;
 
     /**
      * Array2XML: A class to convert array in PHP to XML

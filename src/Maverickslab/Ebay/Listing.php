@@ -50,8 +50,8 @@
 
             //return $verification = self::verify($user_token, $inputs, $site_id);
 
-//            if ($verification['Ack'] === "Failure")
-//                return $verification;
+            //            if ($verification['Ack'] === "Failure")
+            //                return $verification;
 
             return $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
         }
@@ -126,14 +126,14 @@
                     ]);
                 }
 
-                array_push($_variations, [
+                $_variations[] = [
                     'Quantity'           => $variation['quantity'],
                     'SKU'                => $variation['sku'],
                     'StartPrice'         => $variation['price'],
                     'VariationSpecifics' => [
                         'NameValueList' => $specifics
                     ]
-                ]);
+                ];
             }
 
             return $_variations;
@@ -260,9 +260,7 @@
                 'StartPrice'                     => self::setDefaults($listing_data, 'price'),
                 'Title'                          => self::setDefaults($listing_data, 'title'),
                 'Variations'                     => [
-                    'Variation'             => [
-                        self::createVariations(self::setDefaults($listing_data, 'variations'))
-                    ],
+                    'Variation'             => self::createVariations(self::setDefaults($listing_data, 'variations')),
                     'VariationSpecificsSet' => [
                         'NameValueList' => self::createSpecifics(self::setDefaults($listing_data, 'option_values'))
                     ]
