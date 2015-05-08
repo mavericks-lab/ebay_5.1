@@ -27,12 +27,21 @@
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
-            $verification = self::verify($user_token, $inputs, $site_id);
+            if ($listing_data['item_id']) {
+                $verification = self::verify($inputs, $site_id, false);
+            } else {
+                $verification = self::verify($inputs, $site_id, true);
+            }
+
 
             if ($verification['Ack'] === "Failure")
                 return $verification;
 
-            return $this->requester->request($inputs, 'AddFixedPriceItem', $site_id);
+            if ($listing_data['item_id']) {
+                return self::revise($inputs, $site_id);
+            }
+
+            return self::addItem($inputs, $site_id);
         }
 
         /**
@@ -44,16 +53,24 @@
          *
          * @return mixed
          */
-        public function revise($user_token, $listing_data, $site_id = 0)
+        public function revise($inputs, $site_id = 0)
         {
-            $inputs = self::prepareXML($user_token, $listing_data);
-
-            //return $verification = self::verify($user_token, $inputs, $site_id);
-
-            //            if ($verification['Ack'] === "Failure")
-            //                return $verification;
-
             return $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
+        }
+
+
+        /**
+         * create new eBay Listing
+         *
+         * @param     $user_token
+         * @param     $listing_data
+         * @param int $site_id
+         *
+         * @return mixed
+         */
+        public function addItem($inputs, $site_id = 0)
+        {
+            return $this->requester->request($inputs, 'AddFixedPriceItem', $site_id);
         }
 
         /**
@@ -65,9 +82,11 @@
          *
          * @return mixed
          */
-        public function verify($user_token, $listing_data, $site_id)
+        public function verify($listing_data, $site_id, $isNew)
         {
-            return $this->requester->request($listing_data, 'VerifyAddFixedPriceItem', $site_id);
+            $request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyRelistItem';
+
+            return $this->requester->request($listing_data, $request_type, $site_id);
         }
 
         /**
