@@ -33,7 +33,6 @@
                 $verification = self::verify($inputs, $site_id, true);
             }
 
-
             if ($verification['Ack'] === "Failure")
                 return $verification;
 

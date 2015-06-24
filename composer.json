@@ -15,7 +15,8 @@
     "php": ">=5.4.0",
     "illuminate/support": "5.0.*",
     "guzzlehttp/guzzle": "~4.0",
-    "mockery/mockery": "0.9.*"
+    "mockery/mockery": "0.9.*",
+    "cloudinary/cloudinary_php": "dev-master"
   },
   "autoload": {
     "classmap": [
