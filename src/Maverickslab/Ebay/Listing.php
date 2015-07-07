@@ -27,7 +27,7 @@
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
-            if ($listing_data['item_id']) {
+            if (isset($listing_data['item_id'])) {
                 $verification = self::verify($inputs, $site_id, false);
             } else {
                 $verification = self::verify($inputs, $site_id, true);
@@ -36,7 +36,7 @@
             if ($verification['Ack'] === "Failure")
                 return $verification;
 
-            if ($listing_data['item_id']) {
+            if (isset($listing_data['item_id'])) {
                 return self::revise($inputs, $site_id);
             }
 
