@@ -52,7 +52,7 @@ class Picture
         $image_url = "https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url=$image_url&rewriteMime=image/*&resize_w=$desired_width&resize_h=$desired_height&container=url";
 
         $filename = $file_info['filename'] . "" . uniqid();
-        $filename = storage_path() . "\\" . $filename . "." . $file_info['extension'];
+        $filename = storage_path() . "/" . $filename . "." . $file_info['extension'];
 
         file_put_contents($filename, file_get_contents($image_url));
 
