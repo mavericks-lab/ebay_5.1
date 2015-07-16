@@ -115,10 +115,13 @@
             $specifics = [];
 
             foreach ($option_values as $key => $value) {
-                array_push($specifics, [
-                    'Name'  => $key,
-                    'Value' => $value
-                ]);
+                if(!is_null($value) && $value!=""){
+                    array_push($specifics, [
+                        'Name'  => $key,
+                        'Value' => $value,
+                        'Source' => 'ItemSpecific'
+                    ]);
+                }
             }
 
             return $specifics;
