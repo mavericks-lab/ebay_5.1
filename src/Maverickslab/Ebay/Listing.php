@@ -27,6 +27,8 @@
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
+//            return $inputs;
+
             if (isset($listing_data['item_id'])) {
                 $verification = self::verify($inputs, $site_id, false);
             } else {
@@ -100,7 +102,11 @@
         {
             $response = (new Category($this->requester))->getFeatures($user_token, $category_id);
 
-            return ($response['SiteDefaults']['VariationsEnabled'] == "true") ? : false;
+            if (isset($response['SiteDefaults']['VariationsEnabled'])) {
+                return ($response['SiteDefaults']['VariationsEnabled'] == "true") ?: false;
+            }
+
+            return false;
         }
 
         /**
@@ -115,10 +121,10 @@
             $specifics = [];
 
             foreach ($option_values as $key => $value) {
-                if(!is_null($value) && $value!=""){
+                if (!is_null($value) && $value != "") {
                     array_push($specifics, [
-                        'Name'  => $key,
-                        'Value' => $value,
+                        'Name'   => $key,
+                        'Value'  => $value,
                         'Source' => 'ItemSpecific'
                     ]);
                 }
@@ -162,20 +168,20 @@
 
 
         /**
-         * @param array    $array
+         * @param array $array
          * @param callable $callback
-         * @param null     $userdata
+         * @param null $userdata
          *
          * @return array
          */
-        public function array_walk_recursive_delete(array &$array, callable $callback, $userdata = NULL)
+        public function array_walk_recursive_delete(array &$array, callable $callback, $userdata = null)
         {
             foreach ($array as $key => &$value) {
                 if (is_array($value)) {
                     $value = self::array_walk_recursive_delete($value, $callback, $userdata);
                 }
                 if ($callback($value, $key, $userdata)) {
-                    unset($array[ $key ]);
+                    unset($array[$key]);
                 }
             }
 
@@ -191,9 +197,9 @@
          *
          * @return null
          */
-        public function setDefaults($array, $key, $default = NULL)
+        public function setDefaults($array, $key, $default = null)
         {
-            return isset($array[ $key ]) ? $array[ $key ] : $default;
+            return isset($array[$key]) ? $array[$key] : $default;
         }
 
         /**
@@ -292,7 +298,7 @@
                     return empty($value);
                 }
 
-                return ($value === NULL);
+                return ($value === null);
             });
         }
     }
