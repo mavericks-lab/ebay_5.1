@@ -22,7 +22,7 @@
          *
          * @return mixed
          */
-        public function get($user_token, $site_id = 1, $page = 1)
+        public function get($user_token, $site_id = 1, $page = 1, $options = null)
         {
             $entries_per_page = config('ebay.entries_per_page');
 
@@ -30,7 +30,16 @@
             $inputs['RequesterCredentials'] = [
                 'eBayAuthToken' => $user_token
             ];
-            $inputs['NumberOfDays'] = [config('ebay.orders_within_days')];
+
+            if ($options && sizeof($options)) {
+                $inputs['CreateTimeFrom'] = isset($options['CreatedTimeFrom']) ? [date("c", strtotime($options['CreatedTimeFrom']))] : null;
+                $inputs['CreateTimeTo'] = isset($options['CreatedTimeTo']) ? [date("c", strtotime($options['CreatedTimeTo']))] : null;
+                $inputs['ModTimeFrom'] = isset($options['ModTimeFrom']) ? [date("c", strtotime($options['ModTimeFrom']))] : null;
+                $inputs['ModTimeTo'] = isset($options['ModTimeTo']) ? [date("c", strtotime($options['ModTimeTo']))] : null;
+            } else {
+                $inputs['NumberOfDays'] = [config('ebay.orders_within_days')];
+            }
+
             $inputs['OrderRole'] = ['Seller'];
             $inputs['DetailLevel'] = ['ReturnAll'];
             $inputs['Pagination'] = [
@@ -62,15 +71,15 @@
                 'SellerEmail'      => 'email_address',
                 'PaymentMethods'   => 'PayPal',
                 'ShippingDetails'  => [
-                    'CODCost'                            => $order_data['COD'],
-                    'InsuranceFee'                       => $order_data['insurance_fee'],
-                    'InsuranceOption'                    => $order_data['insurance_option'],
-                    'SalesTax'                           => [
+                    'CODCost'                => $order_data['COD'],
+                    'InsuranceFee'           => $order_data['insurance_fee'],
+                    'InsuranceOption'        => $order_data['insurance_option'],
+                    'SalesTax'               => [
                         'SalesTaxPercent'       => $order_data['sales_tax_percentage'],
                         'SalesTaxState'         => $order_data['sales_tax_state'],
                         'ShippingIncludedInTax' => $order_data['shipping_included_in_tax']
                     ],
-                    'ShippingServiceOptions'             => [
+                    'ShippingServiceOptions' => [
                         'ShippingInsuranceCost'         => $order_data['shipping_insurance_cost'],
                         'ShippingService'               => $order_data['shipping_service'],
                         'ShippingServiceAdditionalCost' => $order_data['shipping_service_additional_cost'],
