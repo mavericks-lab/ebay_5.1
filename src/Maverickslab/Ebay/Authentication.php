@@ -118,4 +118,16 @@ class Authentication
 
         return $this->requester->request($inputs, 'GetStore');
     }
+
+    public function revokeToken($user_token){
+        $inputs = [];
+        $inputs['RequesterCredentials'] = [
+            'eBayAuthToken' => $user_token
+        ];
+        $inputs['UnsubscribeNotification'] = [
+            true
+        ];
+
+        return $this->requester->request($inputs, 'RevokeToken');
+    }
 }
