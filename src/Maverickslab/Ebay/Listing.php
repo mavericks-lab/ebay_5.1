@@ -27,8 +27,7 @@
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
-//            return $inputs;
-
+            //verify listing data
             if (isset($listing_data['item_id'])) {
                 $verification = self::verify($inputs, $site_id, false);
             } else {
@@ -85,7 +84,8 @@
          */
         public function verify($listing_data, $site_id, $isNew)
         {
-            $request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyRelistItem';
+            //$request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyReviseItem';
+            $request_type = 'VerifyAddFixedPriceItem';
 
             return $this->requester->request($listing_data, $request_type, $site_id);
         }
