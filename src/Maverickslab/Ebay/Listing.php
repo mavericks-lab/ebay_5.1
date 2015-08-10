@@ -82,7 +82,7 @@
          *
          * @return mixed
          */
-        public function verify($listing_data, $site_id, $isNew)
+        public function verify($listing_data, $site_id, $isNew = true)
         {
             //$request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyReviseItem';
             $request_type = 'VerifyAddFixedPriceItem';
