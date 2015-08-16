@@ -29,17 +29,14 @@
 
             //verify listing data
             if (isset($listing_data['item_id'])) {
-                $verification = self::verify($inputs, $site_id, false);
+                return self::revise($inputs, $site_id);
+//                $verification = self::verify($inputs, $site_id, false);
             } else {
                 $verification = self::verify($inputs, $site_id, true);
             }
 
             if ($verification['Ack'] === "Failure")
                 return $verification;
-
-            if (isset($listing_data['item_id'])) {
-                return self::revise($inputs, $site_id);
-            }
 
             return self::addItem($inputs, $site_id);
         }
