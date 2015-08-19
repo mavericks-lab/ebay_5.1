@@ -78,7 +78,7 @@
         }
 
         //TODO::modify this to have a default interval
-        public function getEndedListings($user_token, $end_time_from,$end_time_to, $page=1){
+        public function getEndedListings($user_token, $product_id, $ebay_site_id=0, $end_time_from,$end_time_to, $page=1){
             $entries_per_page = config('ebay.entries_per_page');
 
             $inputs = [];
