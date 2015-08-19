@@ -76,4 +76,23 @@
 
             return $this->requester->request($inputs, 'GetItem');
         }
+
+        //TODO::modify this to have a default interval
+        public function getEndedListings($user_token, $end_time_from,$end_time_to, $page=1){
+            $entries_per_page = config('ebay.entries_per_page');
+
+            $inputs = [];
+            $inputs['RequesterCredentials'] = [
+                'eBayAuthToken' => $user_token
+            ];
+            $inputs['Pagination'] = [
+                'EntriesPerPage' => $entries_per_page,
+                'PageNumber'     => $page
+            ];
+
+            $inputs['EndTimeFrom'] = $end_time_from;
+            $inputs['EndTimeTo'] = $end_time_to;
+
+            return $this->requester->request($inputs, 'GetSellerList');
+        }
     }
