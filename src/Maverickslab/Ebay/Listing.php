@@ -23,14 +23,19 @@
          *
          * @return mixed
          */
-        public function publish($user_token, $listing_data, $site_id = 0)
+        public function publish($user_token, $listing_data, $site_id = 0, $relist = false)
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
             //verify listing data
             if (isset($listing_data['item_id'])) {
-                return self::revise($inputs, $site_id);
-//                $verification = self::verify($inputs, $site_id, false);
+                //relist ended item
+                if ($relist) {
+                    return self::relistItem($inputs, $site_id);
+                }
+
+                //revise listing
+                return self::reviseItem($inputs, $site_id);
             } else {
                 $verification = self::verify($inputs, $site_id, true);
             }
@@ -38,6 +43,7 @@
             if ($verification['Ack'] === "Failure")
                 return $verification;
 
+            //list item to ebay
             return self::addItem($inputs, $site_id);
         }
 
@@ -50,14 +56,22 @@
          *
          * @return mixed
          */
-        public function revise($inputs, $site_id = 0)
+        public function reviseItem($inputs, $site_id = 0)
         {
             return $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
         }
 
 
+        public function relistItem($inputs, $site_id = 0)
+        {
+            return $this->requester->request($inputs, 'RelistItem', $site_id);
+        }
+
+
         /**
          * create new eBay Listing
+         *
+         *
          *
          * @param     $user_token
          * @param     $listing_data
