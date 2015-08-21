@@ -16,7 +16,7 @@
         public function get($user_token, $product_id = null, $site_id = 1, $page = 1)
         {
             if (is_null($product_id))
-                return self::all($user_token, $site_id = 1, $page = 1);
+                return self::all($user_token, $site_id = 1, $page);
 
             return self::one($user_token, $product_id);
         }
