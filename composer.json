@@ -1,6 +1,6 @@
 {
   "name": "maverickslab/ebay-5.1",
-  "description": "An ebay package for interacting with ebay API",
+  "description": "A laravel package for interacting with ebay API",
   "keywords": [
     "ebay",
     "laravel"
