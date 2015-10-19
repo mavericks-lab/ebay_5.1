@@ -51,7 +51,10 @@
             $response = $this->http_client->post(config('ebay.base_url'), [
                 'headers' => $headers,
                 'body'    => $request_body,
-                'verify'  => false
+                'verify'  => false,
+                'curl' => [
+                    CURLOPT_SSLVERSION => 6
+                ]
             ]);
 
             return json_decode(json_encode($response->xml()), true);
