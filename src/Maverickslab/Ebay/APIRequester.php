@@ -52,9 +52,7 @@
                 'headers' => $headers,
                 'body'    => $request_body,
                 'verify'  => false,
-                'curl' => [
-                    CURLOPT_SSLVERSION => 0
-                ]
+                CURLOPT_SSLVERSION => 0
             ]);
 
             return json_decode(json_encode($response->xml()), true);
