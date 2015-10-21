@@ -304,7 +304,7 @@
                     ]
                 ]];
 
-            \Log::info('Inputs for listing');
+            \Log::info('Inputs for listing in prepare xml');
             \Log::info($inputs);
             return self::array_walk_recursive_delete($inputs, function ($value, $key) {
                 if (is_array($value)) {
