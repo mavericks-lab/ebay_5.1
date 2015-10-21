@@ -304,6 +304,8 @@
                     ]
                 ]];
 
+            \Log::info('Inputs for listing');
+            \Log::info($inputs);
             return self::array_walk_recursive_delete($inputs, function ($value, $key) {
                 if (is_array($value)) {
                     return empty($value);

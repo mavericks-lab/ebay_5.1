@@ -26,8 +26,6 @@ class Picture
         $inputs['ExternalPictureURL'] = [$image];
         $inputs['PictureSet'] = ['Supersize'];
 
-        \Log::info('Ebay package');
-        \Log::info($inputs);
         return $this->requester->request($inputs, 'UploadSiteHostedPictures', $site_id);
     }
 
