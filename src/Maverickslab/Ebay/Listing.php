@@ -32,10 +32,10 @@
                 //relist ended item
                 if ($relist) {
                     return self::relistItem($inputs, $site_id);
+                } else {
+                    //revise listing
+                    return self::reviseItem($inputs, $site_id);
                 }
-
-                //revise listing
-                return self::reviseItem($inputs, $site_id);
             } else {
                 $verification = self::verify($inputs, $site_id, true);
             }
@@ -45,6 +45,31 @@
 
             //list item to ebay
             return self::addItem($inputs, $site_id);
+        }
+
+        /**
+         * @param $user_token
+         * @param $listing_data
+         * @param int $site_id
+         * @return mixed
+         */
+        public function end($user_token, $listing_data, $site_id = 0)
+        {
+            $inputs['RequesterCredentials'] = [
+                'eBayAuthToken' => $user_token
+            ];
+            $inputs['ItemID'] = $listing_data['item_id'];
+            $inputs['EndingReason'] = $listing_data['ending_reason'];
+
+            $inputs = self::array_walk_recursive_delete($inputs, function ($value, $key) {
+                if (is_array($value)) {
+                    return empty($value);
+                }
+
+                return ($value === null);
+            });
+
+            return $this->requester->request($inputs, 'EndItem', $site_id);
         }
 
         /**
@@ -62,6 +87,11 @@
         }
 
 
+        /**
+         * @param $inputs
+         * @param int $site_id
+         * @return mixed
+         */
         public function relistItem($inputs, $site_id = 0)
         {
             return $this->requester->request($inputs, 'RelistItem', $site_id);
@@ -210,7 +240,7 @@
          */
         public function setDefaults($array, $key, $default = null)
         {
-            return isset($array[$key]) ? $array[$key] : $default;
+            return isset($array[$key]) ? $array[$key] : [];
         }
 
         /**

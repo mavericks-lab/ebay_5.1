@@ -1,6 +1,6 @@
 {
-  "name": "maverickslab/ebay",
-  "description": "An ebay package for interacting with ebay API",
+  "name": "maverickslab/ebay-5.1",
+  "description": "A laravel package for interacting with ebay API",
   "keywords": [
     "ebay",
     "laravel"
@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": ">=5.4.0",
-    "illuminate/support": "5.0.*",
+    "illuminate/support": "5.1.*",
     "guzzlehttp/guzzle": "~4.0",
     "mockery/mockery": "0.9.*",
     "cloudinary/cloudinary_php": "1.1.1"
