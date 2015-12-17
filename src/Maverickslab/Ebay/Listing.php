@@ -55,6 +55,7 @@
          */
         public function end($user_token, $listing_data, $site_id = 0)
         {
+            //TODO: format end listing request
             $inputs['RequesterCredentials'] = [
                 'eBayAuthToken' => $user_token
             ];
