@@ -238,9 +238,9 @@
          *
          * @return null
          */
-        public function setDefaults($array, $key, $default = null)
+        public function setDefaults($array, $key, $default = [])
         {
-            return isset($array[$key]) ? $array[$key] : [];
+            return isset($array[$key]) ? $array[$key] : $default;
         }
 
         /**
