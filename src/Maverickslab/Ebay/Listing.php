@@ -59,7 +59,9 @@
             $inputs['RequesterCredentials'] = [
                 'eBayAuthToken' => $user_token
             ];
+
             $inputs['ItemID'] = $listing_data['item_id'];
+//            set default reason for ending listing
             $inputs['EndingReason'] = isset($listing_data['ending_reason']) ? $listing_data['ending_reason'] : "NotAvailable";
 
             $inputs = self::array_walk_recursive_delete($inputs, function ($value, $key) {
