@@ -60,7 +60,7 @@
                 'eBayAuthToken' => $user_token
             ];
             $inputs['ItemID'] = $listing_data['item_id'];
-            $inputs['EndingReason'] = $listing_data['ending_reason'];
+            $inputs['EndingReason'] = isset($listing_data['ending_reason']) ? $listing_data['ending_reason'] : "NotAvailable";
 
             $inputs = self::array_walk_recursive_delete($inputs, function ($value, $key) {
                 if (is_array($value)) {
