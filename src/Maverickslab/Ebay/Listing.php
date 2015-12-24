@@ -47,6 +47,7 @@
             return self::addItem($inputs, $site_id);
         }
 
+		//End an ebay listing
         /**
          * @param $user_token
          * @param $listing_data
