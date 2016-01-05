@@ -148,7 +148,7 @@
             $response = (new Category($this->requester))->getFeatures($user_token, $category_id);
 
             if (isset($response['SiteDefaults']['VariationsEnabled'])) {
-                return ($response['SiteDefaults']['VariationsEnabled'] == "true") ?: false;
+                return ($response['SiteDefaults']['VariationsEnabled'] == "true") ? true : false;
             }
 
             return false;
