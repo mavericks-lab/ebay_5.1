@@ -47,7 +47,7 @@
             return self::addItem($inputs, $site_id);
         }
 
-		//End an ebay listing
+        //End an ebay listing
         /**
          * @param $user_token
          * @param $listing_data
@@ -62,7 +62,8 @@
             ];
 
             $inputs['ItemID'] = $listing_data['item_id'];
-//            set default reason for ending listing
+
+//          set default reason for ending listing
             $inputs['EndingReason'] = isset($listing_data['ending_reason']) ? $listing_data['ending_reason'] : "NotAvailable";
 
             $inputs = self::array_walk_recursive_delete($inputs, function ($value, $key) {
@@ -147,8 +148,8 @@
         {
             $response = (new Category($this->requester))->getFeatures($user_token, $category_id);
 
-            if (isset($response['SiteDefaults']['VariationsEnabled'])) {
-                return ($response['SiteDefaults']['VariationsEnabled'] == "true") ? true : false;
+            if (isset($response['Category']['VariationsEnabled'])) {
+                return ($response['Category']['VariationsEnabled'] == "true") ? true : false;
             }
 
             return false;
@@ -336,7 +337,8 @@
                     'VariationSpecificsSet' => [
                         'NameValueList' => self::createSpecifics(self::setDefaults($listing_data, 'option_values'))
                     ]
-                ]];
+                ]
+            ];
 
             return self::array_walk_recursive_delete($inputs, function ($value, $key) {
                 if (is_array($value)) {
