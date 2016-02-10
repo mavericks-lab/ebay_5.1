@@ -53,6 +53,9 @@ class Category {
         $inputs['CategoryID'] = [
             $category_id
         ];
+        $inputs['DetailLevel'] = [
+            'ReturnAll'
+        ];
 
         return $this->requester->request($inputs, 'GetCategorySpecifics');
     }

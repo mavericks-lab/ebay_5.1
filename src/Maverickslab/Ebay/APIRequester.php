@@ -10,9 +10,6 @@
 
 
     use GuzzleHttp\Client;
-    use GuzzleHttp\Exception\RequestException;
-    use GuzzleHttp\Stream\Stream;
-    use Illuminate\Support\Facades\Config;
 
     class APIRequester
     {

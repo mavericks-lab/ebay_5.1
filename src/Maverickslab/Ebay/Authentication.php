@@ -101,6 +101,8 @@ class Authentication
             'eBayAuthToken' => $user_token
         ];
         $inputs['ShowSellerPaymentPreferences'] = [true];
+        $inputs['ShowSellerReturnPreferences'] = [true];
+        $inputs['ShowSellerProfilePreferences'] = [true];
 
         return $this->requester->request($inputs, 'GetUserPreferences');
     }
@@ -129,5 +131,17 @@ class Authentication
         ];
 
         return $this->requester->request($inputs, 'RevokeToken');
+    }
+
+    public function getSellerProfiles($user_token){
+        $inputs = [];
+        $inputs['RequesterCredentials'] = [
+            'eBayAuthToken' => $user_token
+        ];
+        $inputs['includeDetails'] = [
+            true
+        ];
+
+        return $this->requester->request($inputs, 'getSellerProfiles');
     }
 }

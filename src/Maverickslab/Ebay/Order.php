@@ -12,7 +12,6 @@
     class Order
     {
         use InjectAPIRequester;
-
         /**
          * import all order withing a set period
          *
