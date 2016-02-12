@@ -12,6 +12,7 @@
     class Order
     {
         use InjectAPIRequester;
+
         /**
          * import all order withing a set period
          *
@@ -30,13 +31,18 @@
                 'eBayAuthToken' => $user_token
             ];
 
-            if ($options && sizeof($options)) {
-                $inputs['CreateTimeFrom'] = isset($options['CreatedTimeFrom']) ? [date("c", strtotime($options['CreatedTimeFrom']))] : null;
-                $inputs['CreateTimeTo'] = isset($options['CreatedTimeTo']) ? [date("c", strtotime($options['CreatedTimeTo']))] : null;
-                $inputs['ModTimeFrom'] = isset($options['ModTimeFrom']) ? [date("c", strtotime($options['ModTimeFrom']))] : null;
-                $inputs['ModTimeTo'] = isset($options['ModTimeTo']) ? [date("c", strtotime($options['ModTimeTo']))] : null;
-            } else {
+            if (is_null($options)) {
                 $inputs['NumberOfDays'] = [config('ebay.orders_within_days')];
+            } else {
+                if ($options['type'] == "new") {
+                    $inputs['CreateTimeFrom'] = isset($options['create_time_from']) ? [date("c", strtotime($options['create_time_from']))] : null;
+                    $inputs['CreateTimeTo'] = isset($options['create_time_to']) ? [date("c", strtotime($options['create_time_to']))] : null;
+                }
+
+                if ($options['type'] == "updated") {
+                    $inputs['ModTimeFrom'] = isset($options['mod_time_from']) ? [date("c", strtotime($options['mod_time_from']))] : null;
+                    $inputs['ModTimeTo'] = isset($options['mod_time_to']) ? [date("c", strtotime($options['mod_time_to']))] : null;
+                }
             }
 
             $inputs['OrderRole'] = ['Seller'];
