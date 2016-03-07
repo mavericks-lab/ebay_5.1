@@ -27,7 +27,6 @@
         {
             $inputs = self::prepareXML($user_token, $listing_data);
 
-            //verify listing data
             if (isset($listing_data['item_id'])) {
                 if ($relist) {
                     return self::relistItem($inputs, $site_id);
@@ -57,6 +56,9 @@
          */
         public function prepareXML($user_token, $listing_data)
         {
+            $local_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['shipping_service_options'], "local");
+            $international_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['international_shipping_service_options'], "international");
+
             $inputs['RequesterCredentials'] = [
                 'eBayAuthToken' => $user_token
             ];
@@ -69,7 +71,7 @@
                 'Currency'                       => self::setDefaults($listing_data, 'currency'),
                 'Description'                    => self::setDefaults($listing_data, 'description'),
                 'DisableBuyerRequirements'       => true,
-                'DispatchTimeMax'                => self::setDefaults($listing_data, 'dispatch_max_time'),
+                'DispatchTimeMax'                => self::setDefaults($listing_data, 'dispatch_max_time') ? self::setDefaults($listing_data, 'dispatch_max_time') : 0,
                 'IncludeRecommendations'         => true,
                 'ItemID'                         => self::setDefaults($listing_data, 'item_id'),
                 'ItemSpecifics'                  => [
@@ -94,6 +96,7 @@
                         'MPN'   => self::setDefaults($listing_data, 'manufacturer_part_number')
                     ],
                     'EAN'      => self::setDefaults($listing_data, 'ean'),
+                    'UPC'      => self::setDefaults($listing_data, 'upc'),
                     'GTIN'     => self::setDefaults($listing_data, 'gtin'),
                     'ISBN'     => self::setDefaults($listing_data, 'isbn'),
                 ],
@@ -114,7 +117,7 @@
                         'SalesTaxState'         => self::setDefaults($listing_data['shipping_profile']['sales_tax'], 'sales_tax_state'),
                         'ShippingIncludedInTax' => self::setDefaults($listing_data['shipping_profile']['sales_tax'], 'shipping_included_in_tax'),
                     ],
-                    'ShippingType'                       => self::setDefaults($listing_data['shipping_profile'], 'shipping_type'),
+                    'ShippingType'                       => (sizeof($local_shipping_options) + sizeof($international_shipping_options)) ? self::setDefaults($listing_data['shipping_profile'], 'shipping_type') : null,
                     'CalculatedShippingRate'             => [
                         'OriginatingPostalCode'               => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'originating_postal_code'),
                         'ShippingIrregular'                   => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'shipping_irregular'),
@@ -127,8 +130,8 @@
                         'WeightMajor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_major'),
                         'WeightMinor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_minor')
                     ],
-                    'ShippingServiceOptions'             => $this->formatShippingServiceOptions($listing_data['shipping_profile']['shipping_service_options'], "local"),
-                    'InternationalShippingServiceOption' => $this->formatShippingServiceOptions($listing_data['shipping_profile']['international_shipping_service_options'], "international")
+                    'ShippingServiceOptions'             => $local_shipping_options,
+                    'InternationalShippingServiceOption' => $international_shipping_options
                 ],
                 'ShippingPackageDetails'         => [
                     'MeasurementUnit' => 'English',
@@ -159,6 +162,30 @@
 
                 return ($value === null);
             });
+        }
+
+        public function formatShippingServiceOptions($shipping_service_options, $shipping_service_option_type)
+        {
+            $shipping_profile = array_map(function ($shipping_service_option) use ($shipping_service_option_type) {
+                $data = [
+                    'ShippingService'               => self::setDefaults($shipping_service_option, 'shipping_service'),
+                    'ShippingServiceCost'           => self::setDefaults($shipping_service_option, 'shipping_service_cost'),
+                    'ShippingServiceAdditionalCost' => self::setDefaults($shipping_service_option, 'shipping_service_additional_cost'),
+                    'ShippingServicePriority'       => self::setDefaults($shipping_service_option, 'shipping_service_priority'),
+                    'ShippingSurcharge'             => self::setDefaults($shipping_service_option, 'shipping_surcharge')
+                ];
+
+                if ($shipping_service_option_type === "local") {
+                    $data['FreeShipping'] = self::setDefaults($shipping_service_option, 'free_shipping');
+                } else {
+                    $data['ShipToLocation'] = self::setDefaults($shipping_service_option, 'ship_to_locations');
+                }
+
+                return $data;
+
+            }, $shipping_service_options);
+
+            return $shipping_profile;
         }
 
         /**
@@ -199,32 +226,6 @@
             return $specifics;
         }
 
-        public function formatShippingServiceOptions($shipping_service_options, $shipping_service_option_type)
-        {
-            $shipping_profile = array_map(function ($shipping_service_option) use ($shipping_service_option_type) {
-                $data = [
-                    'ShippingService'               => self::setDefaults($shipping_service_option, 'shipping_service'),
-                    'ShippingServiceCost'           => self::setDefaults($shipping_service_option, 'shipping_service_cost'),
-                    'ShippingServiceAdditionalCost' => self::setDefaults($shipping_service_option, 'shipping_service_additional_cost'),
-                    'ShippingServicePriority'       => self::setDefaults($shipping_service_option, 'shipping_service_priority'),
-                    'ShippingSurcharge'             => self::setDefaults($shipping_service_option, 'shipping_surcharge')
-                ];
-
-                if ($shipping_service_option_type === "local") {
-                    $data['FreeShipping'] = self::setDefaults($shipping_service_option, 'free_shipping');
-                } else {
-                    $data['ShipToLocation'] = self::setDefaults($shipping_service_option, 'ship_to_locations');
-                }
-
-                return $data;
-
-            }, $shipping_service_options);
-
-            //\Log::info($shipping_profile);
-
-            return $shipping_profile;
-        }
-
         /**
          * create variation data
          *
@@ -246,10 +247,15 @@
                 }
 
                 $_variations[] = [
-                    'Quantity'           => $variation['quantity'],
-                    'SKU'                => $variation['sku'],
-                    'StartPrice'         => $variation['price'],
-                    'VariationSpecifics' => [
+                    'VariationProductListingDetails' => [
+                        'UPC'  => $variation['upc'],
+                        'ISBN' => $variation['isbn'],
+                        'EAN'  => $variation['ean']
+                    ],
+                    'Quantity'                       => $variation['quantity'],
+                    'SKU'                            => $variation['sku'],
+                    'StartPrice'                     => $variation['price'],
+                    'VariationSpecifics'             => [
                         'NameValueList' => $specifics
                     ]
                 ];
@@ -300,10 +306,7 @@
          */
         public function reviseItem($inputs, $site_id = 0)
         {
-            //\Log::info($inputs);
             $response = $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
-            //\Log::info("==================");
-            //\Log::info($response);
 
             return $response;
         }

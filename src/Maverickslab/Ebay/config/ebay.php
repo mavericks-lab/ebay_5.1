@@ -15,6 +15,8 @@
         'api_cert_name'           => 'replace this with a valid cert name - CertID',
         'sign_in_url'             => 'https://signin.sandbox.ebay.com/ws/eBayISAPI.dll', #replace this
         'base_url'                => 'https://api.sandbox.ebay.com/ws/api.dll', #replace this
+        'lms_bdexs_url'           => 'https://webservices.sandbox.ebay.com/BulkDataExchangeService', #replace this
+        'lms_fts_url'             => 'https://storage.sandbox.ebay.com/FileTransferService', #replace this
         'warning_level'           => 'High',
         'error_language'          => 'en_US',
         'entries_per_page'        => 50,

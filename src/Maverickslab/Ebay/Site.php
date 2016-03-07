@@ -17,9 +17,9 @@ class Site{
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
         ];
-//        $inputs['DetailName'] = [
-//            'SiteDetails'
-//        ];
+        $inputs['DetailName'] = [
+            'SiteDetails'
+        ];
 
         return $this->requester->request($inputs, 'GeteBayDetails');
     }
