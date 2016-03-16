@@ -56,8 +56,13 @@
          */
         public function prepareXML($user_token, $listing_data)
         {
-            $local_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['shipping_service_options'], "local");
-            $international_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['international_shipping_service_options'], "international");
+            if (isset($listing_data['shipping_profile']['shipping_service_options'])) {
+                $local_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['shipping_service_options'], "local");
+            }
+
+            if (isset($listing_data['shipping_profile']['international_shipping_service_options'])) {
+                $international_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['international_shipping_service_options'], "international");
+            }
 
             $inputs['RequesterCredentials'] = [
                 'eBayAuthToken' => $user_token
@@ -130,8 +135,8 @@
                         'WeightMajor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_major'),
                         'WeightMinor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_minor')
                     ],
-                    'ShippingServiceOptions'             => $local_shipping_options,
-                    'InternationalShippingServiceOption' => $international_shipping_options
+                    'ShippingServiceOptions'             => isset($local_shipping_options) ? $local_shipping_options : [],
+                    'InternationalShippingServiceOption' => isset($international_shipping_options) ? $international_shipping_options : []
                 ],
                 'ShippingPackageDetails'         => [
                     'MeasurementUnit' => 'English',

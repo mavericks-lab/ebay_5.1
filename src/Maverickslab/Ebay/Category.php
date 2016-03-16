@@ -30,7 +30,7 @@ class Category {
         return $this->requester->request($inputs, 'GetCategories', $site_id);
     }
 
-    public function getFeatures($user_token, $category_id){
+    public function getFeatures($user_token, $category_id, $site_id=3){
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
@@ -42,10 +42,10 @@ class Category {
             'ReturnAll'
         ];
 
-        return $this->requester->request($inputs, 'GetCategoryFeatures');
+        return $this->requester->request($inputs, 'GetCategoryFeatures', $site_id);
     }
 
-    public function getSpecifics($user_token, $category_id){
+    public function getSpecifics($user_token, $category_id, $site_id=0){
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
@@ -57,6 +57,6 @@ class Category {
             'ReturnAll'
         ];
 
-        return $this->requester->request($inputs, 'GetCategorySpecifics');
+        return $this->requester->request($inputs, 'GetCategorySpecifics', $site_id);
     }
 }
