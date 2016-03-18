@@ -43,6 +43,7 @@
                 $retryVerification = self::doVerifyListingAgain($verification);
 
                 if ($retryVerification) {
+                    $inputs = self::prepareXML($user_token, self::removeVariations($listing_data));
                     $verification = self::verifyAddItem($inputs, $site_id, true);
                 }
             }
@@ -52,6 +53,24 @@
                 return self::addFixedPriceItem($inputs, $site_id);
 
             return self::addItem($inputs, $site_id);
+        }
+
+        private function removeVariations($listing_data)
+        {
+            if (sizeof($listing_data['variations'])) {
+                $quantity = array_reduce($listing_data['variations'], function ($currentValue, $presentValue) {
+                    return $currentValue + $presentValue['quantity'];
+                }, 0);
+
+                $data['variations'] = [];
+                $data['option_values'] = [];
+
+                $listing_data['quantity'] = $quantity;
+                $listing_data['price'] = $listing_data['variations'][0]['price'];
+                $listing_data['ean'] = $listing_data['variations'][0]['ean'];
+            }
+
+            return $listing_data;
         }
 
         //check if verification failed because of request type
