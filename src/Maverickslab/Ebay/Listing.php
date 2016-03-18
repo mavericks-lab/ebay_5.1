@@ -62,13 +62,13 @@
                 $quantity = array_reduce($listing_data['variations'], function ($currentValue, $presentValue) {
                     return $currentValue + $presentValue['quantity'];
                 }, 0);
-
-                $listing_data['variations'] = [];
-                $listing_data['option_values'] = [];
-
+                
                 $listing_data['quantity'] = $quantity;
                 $listing_data['price'] = $listing_data['variations'][0]['price'];
                 $listing_data['ean'] = $listing_data['variations'][0]['ean'];
+
+                $listing_data['variations'] = [];
+                $listing_data['option_values'] = [];
             }
 
             \Log::info($listing_data);
