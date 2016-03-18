@@ -34,14 +34,38 @@
                     return self::reviseItem($inputs, $site_id);
                 }
             } else {
-                $verification = self::verify($inputs, $site_id, true);
+                $verification = self::VerifyAddFixedPriceItem($inputs, $site_id, true);
             }
 
-            if ($verification['Ack'] === "Failure")
-                return $verification;
+            $retryVerification = false;
+
+            if ($verification['Ack'] === "Failure") {
+                $retryVerification = self::doVerifyListingAgain($verification);
+
+                if ($retryVerification) {
+                    $verification = self::verifyAddItem($inputs, $site_id, true);
+                }
+            }
 
             //list item to ebay
+            if (!$retryVerification)
+                return self::addFixedPriceItem($inputs, $site_id);
+
             return self::addItem($inputs, $site_id);
+        }
+
+        //check if verification failed because of request type
+        private function doVerifyListingAgain($responseFromPrevious)
+        {
+            $errors = isset($responseFromPrevious['Errors']['ShortMessage']) ? [$responseFromPrevious['Errors']] : $responseFromPrevious['Errors'];
+
+            foreach ($errors as $error) {
+                if ($error['ErrorCode'] == 21916933) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         //End an ebay listing
@@ -311,9 +335,7 @@
          */
         public function reviseItem($inputs, $site_id = 0)
         {
-            $response = $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
-
-            return $response;
+            return $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
         }
 
         /**
@@ -325,13 +347,22 @@
          *
          * @return mixed
          */
-        public function verify($listing_data, $site_id, $isNew = true)
+        public function VerifyAddFixedPriceItem($listing_data, $site_id, $isNew = true)
         {
             //$request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyReviseItem';
             $request_type = 'VerifyAddFixedPriceItem';
 
             return $this->requester->request($listing_data, $request_type, $site_id);
         }
+
+        public function verifyAddItem($listing_data, $site_id, $isNew = true)
+        {
+            //$request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyReviseItem';
+            $request_type = 'VerifyAddItem';
+
+            return $this->requester->request($listing_data, $request_type, $site_id);
+        }
+
 
         /**
          * create new eBay Listing
@@ -344,9 +375,14 @@
          *
          * @return mixed
          */
-        public function addItem($inputs, $site_id = 0)
+        public function addFixedPriceItem($inputs, $site_id = 0)
         {
             return $this->requester->request($inputs, 'AddFixedPriceItem', $site_id);
+        }
+
+        public function addItem($inputs, $site_id = 0)
+        {
+            return $this->requester->request($inputs, 'AddItem', $site_id);
         }
 
         /**
