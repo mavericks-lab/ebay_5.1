@@ -355,6 +355,7 @@
             return $this->requester->request($listing_data, $request_type, $site_id);
         }
 
+        //add item
         public function verifyAddItem($listing_data, $site_id, $isNew = true)
         {
             //$request_type = ($isNew) ? 'VerifyAddFixedPriceItem' : 'VerifyReviseItem';
