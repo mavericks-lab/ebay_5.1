@@ -63,8 +63,8 @@
                     return $currentValue + $presentValue['quantity'];
                 }, 0);
 
-                $data['variations'] = [];
-                $data['option_values'] = [];
+                $listing_data['variations'] = [];
+                $listing_data['option_values'] = [];
 
                 $listing_data['quantity'] = $quantity;
                 $listing_data['price'] = $listing_data['variations'][0]['price'];
