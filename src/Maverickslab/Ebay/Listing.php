@@ -55,6 +55,7 @@
             return self::addItem($inputs, $site_id);
         }
 
+        //remove variations
         private function removeVariations($listing_data)
         {
             if (sizeof($listing_data['variations'])) {
@@ -69,6 +70,8 @@
                 $listing_data['price'] = $listing_data['variations'][0]['price'];
                 $listing_data['ean'] = $listing_data['variations'][0]['ean'];
             }
+
+            \Log::info($listing_data);
 
             return $listing_data;
         }
