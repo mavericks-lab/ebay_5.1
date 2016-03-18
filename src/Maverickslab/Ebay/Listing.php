@@ -31,7 +31,16 @@
                 if ($relist) {
                     return self::relistItem($inputs, $site_id);
                 } else {
-                    return self::reviseItem($inputs, $site_id);
+                    $response = self::reviseFixedPriceItem($inputs, $site_id);
+
+                    if($response['Ack'] === "Failure"){
+                        if(self::doReviseItemAgain($response)){
+                            $inputs = self::prepareXML($user_token, self::removeVariations($listing_data));
+                            $response = self::reviseItem($inputs, $site_id, true);
+                        }
+                    }
+
+                    return $response;
                 }
             } else {
                 $verification = self::VerifyAddFixedPriceItem($inputs, $site_id, true);
@@ -53,6 +62,20 @@
                 return self::addFixedPriceItem($inputs, $site_id);
 
             return self::addItem($inputs, $site_id);
+        }
+
+        //check if verification failed because of request type
+        private function doReviseItemAgain($responseFromPrevious)
+        {
+            $errors = isset($responseFromPrevious['Errors']['ShortMessage']) ? [$responseFromPrevious['Errors']] : $responseFromPrevious['Errors'];
+
+            foreach ($errors as $error) {
+                if ($error['ErrorCode'] == 21916933) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         //remove variations
@@ -353,9 +376,14 @@
          *
          * @return mixed
          */
-        public function reviseItem($inputs, $site_id = 0)
+        public function reviseFixedPriceItem($inputs, $site_id = 0)
         {
             return $this->requester->request($inputs, 'ReviseFixedPriceItem', $site_id);
+        }
+
+        public function reviseItem($inputs, $site_id = 0)
+        {
+            return $this->requester->request($inputs, 'ReviseItem', $site_id);
         }
 
         /**
