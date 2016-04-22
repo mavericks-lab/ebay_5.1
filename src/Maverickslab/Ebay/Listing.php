@@ -471,9 +471,9 @@
          *
          * @return bool
          */
-        public function variationEnabled($user_token, $category_id)
+        public function variationEnabled($user_token, $category_id, $site_id)
         {
-            $response = (new Category($this->requester))->getFeatures($user_token, $category_id);
+            $response = (new Category($this->requester))->getFeatures($user_token, $category_id, $site_id);
 
             if (isset($response['Category']['VariationsEnabled'])) {
                 return ($response['Category']['VariationsEnabled'] == "true") ? true : false;

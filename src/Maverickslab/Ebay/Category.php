@@ -30,7 +30,7 @@ class Category {
         return $this->requester->request($inputs, 'GetCategories', $site_id);
     }
 
-    public function getFeatures($user_token, $category_id, $site_id=3){
+    public function getFeatures($user_token, $category_id, $site_id=0){
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
