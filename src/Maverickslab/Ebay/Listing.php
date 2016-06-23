@@ -123,6 +123,9 @@ class Listing
      */
     public function prepareXML($user_token, $listing_data)
     {
+        $local_shipping_options = [];
+        $international_shipping_options = [];
+
         if (isset($listing_data['shipping_profile']['shipping_service_options'])) {
             $local_shipping_options = $this->formatShippingServiceOptions($listing_data['shipping_profile']['shipping_service_options'], "local");
         }
