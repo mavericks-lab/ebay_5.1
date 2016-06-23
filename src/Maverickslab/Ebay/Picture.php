@@ -54,6 +54,7 @@ class Picture
             return $cloudinary_image['url'];
         } catch (\Exception $ex) {
             \Log::info("Image could not be resized");
+            \Log::info($ex->getCode());
             \Log::info($ex->getMessage());
 
             return [
