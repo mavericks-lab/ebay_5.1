@@ -193,7 +193,7 @@ class Listing
                     'ShippingIncludedInTax' => self::setDefaults($listing_data['shipping_profile']['sales_tax'], 'shipping_included_in_tax'),
                 ] : [],
                 'ShippingType'                       => (sizeof($local_shipping_options) + sizeof($international_shipping_options)) ? self::setDefaults($listing_data['shipping_profile'], 'shipping_type') : null,
-                'CalculatedShippingRate'             => [
+                'CalculatedShippingRate'             => isset($listing_data['shipping_profile']['calculated_shipping_rate']) ? [
                     'OriginatingPostalCode'               => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'originating_postal_code'),
                     'ShippingIrregular'                   => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'shipping_irregular'),
                     'PackagingHandlingCost'               => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'package_handling_cost'),
@@ -204,7 +204,7 @@ class Listing
                     'ShippingPackage'                     => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'shipping_package'),
                     'WeightMajor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_major'),
                     'WeightMinor'                         => self::setDefaults($listing_data['shipping_profile']['calculated_shipping_rate'], 'weight_minor')
-                ],
+                ] : [],
                 'ShippingServiceOptions'             => isset($local_shipping_options) ? $local_shipping_options : [],
                 'InternationalShippingServiceOption' => isset($international_shipping_options) ? $international_shipping_options : []
             ],
