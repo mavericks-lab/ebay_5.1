@@ -52,18 +52,10 @@ class Picture
                 'height' => $desired_height
             ]);
 
-            \Log::info([
-                "crop"   => "scale",
-                'width'  => $desired_width,
-                'height' => $desired_height
-            ]);
-
             return $cloudinary_image['url'];
         } catch (\Exception $ex) {
             \Log::info("Image could not be resized");
-            \Log::info($ex->getCode());
-            \Log::info($ex->getMessage());
-
+            
             return [
                 'Ack'     => 'failure',
                 'message' => 'Image URL not available'
