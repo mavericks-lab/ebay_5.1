@@ -47,6 +47,7 @@ class Picture
             $desired_height = ceil(($desired_width / $original_width) * $original_height);
 
             $cloudinary_image = self::uploadToCloudinary($image_url, [
+                "crop"   => "scale",
                 'width'  => $desired_width,
                 'height' => $desired_height
             ]);
