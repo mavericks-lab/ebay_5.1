@@ -121,7 +121,8 @@ class Authentication
         return $this->requester->request($inputs, 'GetStore');
     }
 
-    public function revokeToken($user_token){
+    public function revokeToken($user_token)
+    {
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken' => $user_token
@@ -133,7 +134,8 @@ class Authentication
         return $this->requester->request($inputs, 'RevokeToken');
     }
 
-    public function getSellerProfiles($user_token){
+    public function getSellerProfiles($user_token)
+    {
         $inputs = [];
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken' => $user_token
@@ -143,5 +145,15 @@ class Authentication
         ];
 
         return $this->requester->request($inputs, 'getSellerProfiles');
+    }
+
+    public function getApiAccessRules($user_token)
+    {
+        $inputs = [];
+        $inputs['RequesterCredentials'] = [
+            'eBayAuthToken' => $user_token
+        ];
+
+        return $this->requester->request($inputs, 'GetApiAccessRules');
     }
 }

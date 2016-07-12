@@ -45,6 +45,8 @@
             $xml = ArrayToXML::createXML($root_node, array_merge($request_body, $inputs));
             $request_body = $xml->saveXML();
 
+            dd($request_body);
+            
             $response = $this->http_client->post(config('ebay.base_url'), [
                 'headers' => $headers,
                 'body'    => $request_body,

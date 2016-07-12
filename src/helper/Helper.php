@@ -20,14 +20,6 @@
             if (is_array($value))
                 removeNullValues($array);
 
-            //{
-            //                if(sizeof($value)=0){
-            //                    unset($key);
-            //                }else{
-
-            ////}
-            //}
-
             if (is_null($value))
                 unset($array[ $key ]);
         }
