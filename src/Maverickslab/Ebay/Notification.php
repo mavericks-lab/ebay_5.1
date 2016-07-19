@@ -20,26 +20,36 @@ class Notification
             'eBayAuthToken' => $user_token
         ];
         $inputs['ApplicationDeliveryPreferences'] = [
-//            'AlertEmail' =>'mailto://info@syncommerceapp.com',
             'AlertEnable'       => 'Enable',
             'ApplicationEnable' => 'Enable',
             'ApplicationURL'    => config('ebay.notificationUrl'),
             'DeviceType'        => 'Platform',
         ];
-        $inputs['UserDeliveryPreferenceArray'] = [];
+
+        $notificationEnabled['NotificationEnable'] = [];
 
         foreach (config('ebay.notifications') as $notification) {
-            $notificationEnable = [];
-            $notificationEnable['NotificationEnable'] = [
-                'EventType'   => $notification,
-                'EventEnable' => 'Enable'
-            ];
-
-            array_push($inputs['UserDeliveryPreferenceArray'], $notificationEnable);
+            array_push($notificationEnabled['NotificationEnable'],
+                [
+                    'EventType'   => $notification,
+                    'EventEnable' => 'Enable'
+                ]
+            );
         }
 
-        dd($inputs);
+        $inputs['UserDeliveryPreferenceArray'] = $notificationEnabled;
 
         return $this->requester->request($inputs, 'SetNotificationPreferences');
+    }
+
+    public function getNotificationPreferences($user_token)
+    {
+        $inputs = [];
+        $inputs['RequesterCredentials'] = [
+            'eBayAuthToken' => $user_token
+        ];
+        $inputs['PreferenceLevel'] = 'Application';
+
+        return $this->requester->request($inputs, 'GetNotificationPreferences');
     }
 }

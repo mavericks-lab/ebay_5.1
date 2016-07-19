@@ -134,6 +134,20 @@ class Authentication
         return $this->requester->request($inputs, 'RevokeToken');
     }
 
+    //rewrite
+//    public function refreshToken($user_token)
+//    {
+//        $inputs = [];
+//        $inputs['RequesterCredentials'] = [
+//            'eBayAuthToken' => $user_token
+//        ];
+//        $inputs['UnsubscribeNotification'] = [
+//            true
+//        ];
+//
+//        return $this->requester->request($inputs, 'RevokeToken');
+//    }
+
     public function getSellerProfiles($user_token)
     {
         $inputs = [];
