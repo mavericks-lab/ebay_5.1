@@ -18,7 +18,6 @@ class Picture
     public function upload($user_token, $url, $site_id = 0)
     {
         $image_url = self::resize($url);
-        \Log::info("Cron : " . $image_url);
 
         if ($image_url) {
             $inputs = [];
