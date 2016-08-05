@@ -17,7 +17,7 @@ class Picture
 
     public function upload($user_token, $url, $site_id = 0)
     {
-        $image_url = self::resize($url);
+        return $image_url = self::resize($url);
 
         if ($image_url) {
             $inputs = [];
@@ -39,31 +39,29 @@ class Picture
             $file_info = pathinfo($image_url);
             list($original_width, $original_height) = getimagesize(urldecode($image_url));
 
-            if ($original_width >= 1500 || $original_height >= 1500) {
+            if ($original_width >= 500 || $original_height >= 500) {
                 return $image_url;
             }
 
-            $desired_width = 1500;
+            $desired_width = 500;
             $desired_height = ceil(($desired_width / $original_width) * $original_height);
 
-            $cloudinary_image = self::uploadToCloudinary($image_url, [
-                "crop"   => "scale",
+            return $cloudinary_image = self::uploadToCloudinary($image_url, [
+                'crop'   => 'mfit',
                 'width'  => $desired_width,
                 'height' => $desired_height
             ]);
 
             return $cloudinary_image['url'];
         } catch (\Exception $ex) {
-            \Log::info("Image could not be resized");
-            
-            return [
-                'Ack'     => 'failure',
-                'message' => 'Image URL not available'
-            ];
+            \Log::info("Image could not be resized => " . $ex->getMessage());
+
+            return ['Ack'     => 'failure',
+                    'message' => $ex->getMessage()];
         }
     }
 
-    public function uploadToCloudinary($image_path)
+    public function uploadToCloudinary($image_path, $options)
     {
         Cloudinary::config([
             "cloud_name" => config('ebay.cloudinary_cloud_name'),
@@ -71,6 +69,6 @@ class Picture
             "api_secret" => config('ebay.cloudinary_api_secret')
         ]);
 
-        return Uploader::upload($image_path);
+        return Uploader::upload($image_path, $options);
     }
 }
