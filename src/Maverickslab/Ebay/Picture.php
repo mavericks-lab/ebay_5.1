@@ -46,13 +46,16 @@ class Picture
             $desired_width = 500;
             $desired_height = ceil(($desired_width / $original_width) * $original_height);
 
-            return $cloudinary_image = self::uploadToCloudinary($image_url, [
+            $cloudinary_image = self::uploadToCloudinary($image_url, [
                 'crop'   => 'mfit',
                 'width'  => $desired_width,
                 'height' => $desired_height
             ]);
 
-            return $cloudinary_image['url'];
+            return ['Ack'              => 'success',
+                    'image_url'        => $cloudinary_image['url'],
+                    'secure_image_url' => $cloudinary_image['secure_url']
+            ];
         } catch (\Exception $ex) {
             \Log::info("Image could not be resized => " . $ex->getMessage());
 
