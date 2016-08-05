@@ -30,9 +30,13 @@ class Picture
             return $this->requester->request($inputs, 'UploadSiteHostedPictures', $site_id);
         }
 
+        //nothing was done here
         return null;
     }
 
+    /*
+    * resize the image
+    */
     public function resize($image_url)
     {
         try {
