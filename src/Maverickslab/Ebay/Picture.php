@@ -17,7 +17,7 @@ class Picture
 
     public function upload($user_token, $url, $site_id = 0)
     {
-        return $image_url = self::resize($url);
+        $image_url = self::resize($url);
 
         if ($image_url) {
             $inputs = [];
@@ -52,10 +52,12 @@ class Picture
                 'height' => $desired_height
             ]);
 
-            return ['Ack'              => 'success',
-                    'image_url'        => $cloudinary_image['url'],
-                    'secure_image_url' => $cloudinary_image['secure_url']
-            ];
+            return $cloudinary_image['url'];
+
+//            return ['Ack'              => 'success',
+//                    'image_url'        => $cloudinary_image['url'],
+//                    'secure_image_url' => $cloudinary_image['secure_url']
+//            ];
         } catch (\Exception $ex) {
             \Log::info("Image could not be resized => " . $ex->getMessage());
 
