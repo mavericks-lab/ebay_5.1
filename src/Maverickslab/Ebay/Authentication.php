@@ -35,20 +35,24 @@ class Authentication
 
         $response = $this->requester->request($inputs, 'GetSessionID', $site_id);
 
-        if (!$return_session_id) {
-            if ($response['Ack'] === 'Success') {
-                $session_id = $response['SessionID'];
-                Session::put('ebay_session_id', $session_id);
+        if ($response['Ack'] === 'Success') {
+            $session_id = $response['SessionID'];
+            Session::put('ebay_session_id', $session_id);
 
-                $base_url = config('ebay.sign_in_url') . config('ebay.sign_in_urls')[$site_id];
+            $base_url = config('ebay.sign_in_url') . config('ebay.sign_in_urls')[$site_id];
 
-                $url = $base_url
-                    . "?SignIn&runame="
-                    . config("ebay.runame")
-                    . "&SessID="
-                    . urlencode($session_id);
+            $url = $base_url
+                . "?SignIn&runame="
+                . config("ebay.runame")
+                . "&SessID="
+                . urlencode($session_id);
 
+
+            if (!$return_session_id) {
                 return Redirect::to($url);
+            } else {
+                $response['redirect_url'] = $url;
+                return $response;
             }
         }
 

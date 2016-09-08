@@ -45,7 +45,7 @@ class APIRequester
         $xml = ArrayToXML::createXML($root_node, array_merge($request_body, $inputs));
         $request_body = $xml->saveXML();
 
-        $url = config('ebay.base_url');// . config('ebay.base_urls')[0];
+        $url = config('ebay.base_url');
 
         $response = $this->http_client->post($url, [
             'headers' => $headers,
