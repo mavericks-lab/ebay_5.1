@@ -28,19 +28,21 @@ class Authentication
      *
      * @return array|\GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|mixed|null
      */
-    public function getSessionId($return_session_id = true)
+    public function getSessionId($site_id = 0, $return_session_id = true)
     {
         $inputs = [];
         $inputs['RuName'] = config('ebay.runame');
 
-        $response = $this->requester->request($inputs, 'GetSessionID');
+        $response = $this->requester->request($inputs, 'GetSessionID', $site_id);
 
         if (!$return_session_id) {
             if ($response['Ack'] === 'Success') {
                 $session_id = $response['SessionID'];
                 Session::put('ebay_session_id', $session_id);
 
-                $url = config('ebay.sign_in_url')
+                $base_url = config('ebay.sign_in_url') . config('ebay.sign_in_urls')[$site_id];
+
+                $url = $base_url
                     . "?SignIn&runame="
                     . config("ebay.runame")
                     . "&SessID="
