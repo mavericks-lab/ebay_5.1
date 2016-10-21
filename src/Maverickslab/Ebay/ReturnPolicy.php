@@ -17,9 +17,9 @@ class ReturnPolicy {
         $inputs['RequesterCredentials'] = [
             'eBayAuthToken'=>$user_token
         ];
-        $inputs['DetailName'] = [
-            'ReturnPolicyDetails'
-        ];
+//        $inputs['DetailName'] = [
+//            'ReturnPolicyDetails'
+//        ];
 
         return $this->requester->request($inputs, 'GeteBayDetails');
     }
