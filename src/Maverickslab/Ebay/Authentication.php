@@ -35,7 +35,7 @@ class Authentication
 
         $response = $this->requester->request($inputs, 'GetSessionID', $site_id);
         
-        if ($return_session_id) {
+        if (!$return_session_id) {
             if ($response['Ack'] === 'Success') {
                 $session_id = $response['SessionID'];
                 Session::put('ebay_session_id', $session_id);
