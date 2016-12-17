@@ -34,7 +34,7 @@ class Authentication
         $inputs['RuName'] = config('ebay.runame');
 
         $response = $this->requester->request($inputs, 'GetSessionID', $site_id);
-        
+
         if (!$return_session_id) {
             if ($response['Ack'] === 'Success') {
                 $session_id = $response['SessionID'];
@@ -105,6 +105,7 @@ class Authentication
         $inputs['ShowSellerPaymentPreferences'] = [true];
         $inputs['ShowSellerReturnPreferences'] = [true];
         $inputs['ShowSellerProfilePreferences'] = [true];
+        $inputs['ShowOutOfStockControlPreference'] = [true];
 
         return $this->requester->request($inputs, 'GetUserPreferences');
     }

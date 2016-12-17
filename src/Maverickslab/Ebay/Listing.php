@@ -42,10 +42,9 @@ class Listing
 
                 return $response;
             }
-        } else {
-            $verification = self::VerifyAddFixedPriceItem($inputs, $site_id, true);
         }
 
+        $verification = self::VerifyAddFixedPriceItem($inputs, $site_id, true);
         $retryVerification = false;
 
         if ($verification['Ack'] === "Failure") {
@@ -58,7 +57,7 @@ class Listing
         }
 
         //list item to ebay
-        if (!$retryVerification)
+        if (!$retryVerification && $listing_data['listing_type'] === "FixedPriceItem")
             return self::addFixedPriceItem($inputs, $site_id);
 
         return self::addItem($inputs, $site_id);
@@ -452,7 +451,7 @@ class Listing
 
         $inputs['ItemID'] = $listing_data['item_id'];
 
-//          set default reason for ending listing
+//      set default reason for ending listing
         $inputs['EndingReason'] = isset($listing_data['ending_reason']) ? $listing_data['ending_reason'] : "NotAvailable";
 
         $inputs = self::array_walk_recursive_delete($inputs, function ($value, $key) {
